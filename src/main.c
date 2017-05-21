@@ -890,9 +890,10 @@ int has_lights(Chunk *chunk) {
                 continue;
             }
             Map *map = &other->lights;
-            if (map->size) {
-                return 1;
-            }
+            /** TODO **/
+            //if (map->size) {
+            //    return 1;
+            //}
         }
     }
     return 0;
@@ -1006,9 +1007,11 @@ void compute_chunk(WorkerItem *item) {
         for (int a = 0; a < 3; a++) {
             for (int b = 0; b < 3; b++) {
                 Map *map = item->light_maps[a][b];
-                if (map && map->size) {
-                    has_light = 1;
-                }
+                /** TODO **/
+                has_light = 1; //
+                //if (map && map->size) {
+                //    has_light = 1;
+                //}
             }
         }
     }
@@ -1240,8 +1243,8 @@ void init_chunk(Chunk *chunk, int p, int q) {
     int dx = p * CHUNK_SIZE - 1;
     int dy = 0;
     int dz = q * CHUNK_SIZE - 1;
-    map_alloc(block_map, dx, dy, dz, 0x7fff);
-    map_alloc(light_map, dx, dy, dz, 0xf);
+    //map_alloc(block_map, dx, dy, dz, 0x7fff);
+    //map_alloc(light_map, dx, dy, dz, 0xf);
 }
 
 void create_chunk(Chunk *chunk, int p, int q) {
@@ -1277,8 +1280,8 @@ void delete_chunks() {
             }
         }
         if (delete) {
-            map_free(&chunk->map);
-            map_free(&chunk->lights);
+            //map_free(&chunk->map);
+            //map_free(&chunk->lights);
             sign_list_free(&chunk->signs);
             del_buffer(chunk->buffer);
             del_buffer(chunk->sign_buffer);
@@ -1292,8 +1295,8 @@ void delete_chunks() {
 void delete_all_chunks() {
     for (int i = 0; i < g->chunk_count; i++) {
         Chunk *chunk = g->chunks + i;
-        map_free(&chunk->map);
-        map_free(&chunk->lights);
+        //map_free(&chunk->map);
+        //map_free(&chunk->lights);
         sign_list_free(&chunk->signs);
         //printf("deleting: %d, %d\n", (int) chunk->buffer, (int) chunk->sign_buffer);
         del_buffer(chunk->buffer);
@@ -1313,8 +1316,8 @@ void check_workers() {
                 if (item->load) {
                     Map *block_map = item->block_maps[1][1];
                     Map *light_map = item->light_maps[1][1];
-                    map_free(&chunk->map);
-                    map_free(&chunk->lights);
+                    //map_free(&chunk->map);
+                    //map_free(&chunk->lights);
                     map_copy(&chunk->map, block_map);
                     map_copy(&chunk->lights, light_map);
                     request_chunk(item->p, item->q);
@@ -1326,11 +1329,11 @@ void check_workers() {
                     Map *block_map = item->block_maps[a][b];
                     Map *light_map = item->light_maps[a][b];
                     if (block_map) {
-                        map_free(block_map);
+                        //map_free(block_map);
                         free(block_map);
                     }
                     if (light_map) {
-                        map_free(light_map);
+                        //map_free(light_map);
                         free(light_map);
                     }
                 }

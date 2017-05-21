@@ -1,6 +1,55 @@
 #include <stdlib.h>
 #include <string.h>
 #include "map.h"
+#include "util.h"
+
+/*
+void map_alloc(Map *map, int dx, int dy, int dz, int mask) {
+
+}
+*/
+
+/*
+void map_free(Map *map) {
+}
+*/
+
+void map_copy(Map *dst, Map *src) {
+    dst->dx = src->dx;
+    dst->dy = src->dy;
+    dst->dz = src->dz;
+    memcpy(&dst->blocks, src->blocks, MAP_BLOCKS_LEN * sizeof (map_blocks_t));
+}
+
+int map_set(Map *map, int x, int y, int z, int w) {
+    return 0;
+
+    /*
+    if(x < 0 || z < 0) {
+        return 0;
+    }
+    //m_nodes[x + y * k_sector_width + z * k_sector_width_squared];
+    printf("%d\n", chunked(x) + y * CHUNK_SIZE + chunked(z) * CHUNK_SIZE_SQ);
+    map->blocks[chunked(x) + y * CHUNK_SIZE + chunked(z) * CHUNK_SIZE_SQ] = w;
+    return 1;
+    */
+}
+
+int map_get(Map *map, int x, int y, int z) {
+    return 0;
+
+    /*
+    if(x < 0 || z < 0) {
+        return 0;
+    }
+
+    return map->blocks[chunked(x) + y * CHUNK_SIZE + chunked(z) * CHUNK_SIZE_SQ];
+    */
+}
+
+
+/*
+void map_grow(Map *map);
 
 int hash_int(int key) {
     key = ~key + (key << 15);
@@ -112,3 +161,4 @@ void map_grow(Map *map) {
     map->size = new_map.size;
     map->data = new_map.data;
 }
+*/
