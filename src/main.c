@@ -2096,6 +2096,11 @@ void tree(Block *block) {
     }
 }
 
+void time_command(double new_elapsed) {
+    glfwSetTime(fmod(new_elapsed, g->day_length));
+    g->time_changed = 1;
+}
+
 void parse_command(const char *buffer, int forward) {
     char username[128] = {0};
     char token[128] = {0};
@@ -2103,6 +2108,8 @@ void parse_command(const char *buffer, int forward) {
     int server_port = DEFAULT_PORT;
     char filename[MAX_PATH_LENGTH];
     int radius, count, xc, yc, zc;
+    double time;
+    int is_allowing_time_change = !get_client_enabled();
     if (sscanf(buffer, "/identity %128s %128s", username, token) == 2) {
         db_auth_set(username, token);
         add_message("Successfully imported identity token!");
@@ -2200,6 +2207,15 @@ void parse_command(const char *buffer, int forward) {
     }
     else if (sscanf(buffer, "/cylinder %d", &radius) == 1) {
         cylinder(&g->block0, &g->block1, radius, 0);
+    }
+    else if (is_allowing_time_change && strcmp(buffer, "/day") == 0) {
+        time_command(DAY_LENGTH / 2.0);
+    }
+    else if (is_allowing_time_change && strcmp(buffer, "/night") == 0) {
+        time_command(0.0);
+    }
+    else if (is_allowing_time_change && sscanf(buffer,  "/time %lf", &time) == 1) {
+        time_command(time);
     }
     else if (forward) {
         client_talk(buffer);
