@@ -1,3 +1,5 @@
+# This CMakeLists is modified for CraftNG.
+
 project(GLFW C)
 
 cmake_minimum_required(VERSION 2.8.12)
@@ -107,7 +109,7 @@ endif()
 # Set compiler specific flags
 #--------------------------------------------------------------------
 if (UNIX)
-    add_definitions(-Wall)
+    add_definitions(-Wall -Wno-error=implicit-function-declaration)
 
     if (BUILD_SHARED_LIBS)
         add_definitions(-fvisibility=hidden)

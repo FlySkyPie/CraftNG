@@ -32,7 +32,6 @@
 #define SHOW_TREES 1
 #define SHOW_ITEM 1
 #define SHOW_CROSSHAIRS 1
-#define SHOW_WIREFRAME 1
 #define SHOW_INFO_TEXT 1
 #define SHOW_CHAT_TEXT 1
 #define SHOW_PLAYER_NAMES 1

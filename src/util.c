@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include "cube.h"
 #include "lodepng.h"
 #include "matrix.h"
 #include "util.h"
@@ -41,7 +42,10 @@ char *load_file(const char *path) {
     int length = ftell(file);
     rewind(file);
     char *data = calloc(length + 1, sizeof(char));
-    fread(data, 1, length, file);
+    if(fread(data, 1, length, file) != length) {
+        fprintf(stderr, "fread failed to read desired length\n");
+        exit(-1);
+    }
     fclose(file);
     return data;
 }

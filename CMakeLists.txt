@@ -8,14 +8,14 @@ FILE(GLOB SOURCE_WORLDGEN_FILES src/worldgen/*.c)
 add_executable(
     craft
     ${SOURCE_FILES}
-    ${SOURCE_WORLDGEN_FILES}    
+    ${SOURCE_WORLDGEN_FILES}
     deps/glew/src/glew.c
     deps/lodepng/lodepng.c
     deps/noise/noise.c
     deps/sqlite/sqlite3.c
     deps/tinycthread/tinycthread.c)
 
-add_definitions(-std=c99 -O3)
+add_definitions(-std=c99 -O3 -Werror=implicit-function-declaration)
 
 add_subdirectory(deps/glfw)
 include_directories(deps/glew/include)
