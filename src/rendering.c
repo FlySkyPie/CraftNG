@@ -28,6 +28,17 @@ GLuint gen_text_buffer(float x, float y, float n, char *text) {
     return gen_faces(4, length, data);
 }
 
+GLuint gen_ui_buffer(float x, float y, float n, char spritesheet_index) {
+    /** TODO:
+            - What's with the component count?
+            - make_ui_quad() is a hack of make_character.
+    **/
+    GLfloat *data = malloc_faces(4, 1);
+    //make_character(data, x, y, n, n * 2, spritesheet_index);
+    make_ui_quad(data, x, y, n, n, spritesheet_index);
+    return gen_faces(4, 1, data);
+}
+
 void draw_triangles_3d_ao(Attrib *attrib, GLuint buffer, int count) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
     glEnableVertexAttribArray(attrib->position);
@@ -141,6 +152,13 @@ void draw_plant(Attrib *attrib, GLuint buffer) {
 
 void draw_player(Attrib *attrib, Player *player) {
     draw_cube(attrib, player->buffer);
+}
+
+void draw_ui(Attrib *attrib, GLuint buffer) {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    draw_triangles_2d(attrib, buffer, 6);
+    glDisable(GL_BLEND);
 }
 
 GLuint gen_crosshair_buffer(int width, int height, int scale) {

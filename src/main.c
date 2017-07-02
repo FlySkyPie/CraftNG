@@ -2520,6 +2520,54 @@ void reset_model() {
     Inventory_reset(&g->inventory);
 }
 
+void test(Attrib *attrib) {
+    float ts = 12 * g->scale;
+    float tx = ts / 2;
+    float ty = g->height - ts;
+
+    //render_text(attrib, ALIGN_LEFT, tx, ty, ts, "hello", g->width, g->height);
+
+    float matrix[16];
+    set_matrix_2d(matrix, g->width, g->height);
+    glUseProgram(attrib->program);
+    glUniformMatrix4fv(attrib->matrix, 1, GL_FALSE, matrix);
+    glUniform1i(attrib->sampler, 4);
+    glUniform1i(attrib->extra1, 0);
+    //GLuint buffer = gen_text_buffer(15.0f, 25.0f, 16 * g->scale, "adsgsdgadsg");
+    //draw_text(attrib, buffer, strlen("adsgsdgadsg"));
+    GLuint buffer = gen_ui_buffer(50.0f, 50.0f, 32 * g->scale, '\2');
+    //draw_item(attrib, buffer, 6);
+    //draw_text(attrib, buffer, 1);
+    draw_ui(attrib, buffer);
+    del_buffer(buffer);
+
+    /*
+    char text[] = "sadgasdgasdgh";
+    int length = strlen(text);
+    tx -= ts * ALIGN_LEFT * (length - 1) / 2;
+    GLuint buffer = gen_text_buffer(tx, ty, ts, text);
+    draw_text(attrib, buffer, length);
+    del_buffer(buffer);
+    */
+
+    /*
+    float matrix[16];
+    glUseProgram(attrib->program);
+    set_matrix_2d(matrix, g->width, g->height);
+    glUniform3f(attrib->camera, 0, 0, 5);
+    glUniform1i(attrib->sampler, 4);
+    glUniformMatrix4fv(attrib->matrix, 1, GL_FALSE, matrix);
+    GLuint buffer = gen_ui_buffer(tx, ty, 0.5f);
+    draw_item(attrib, buffer, 6);
+    */
+
+    /*
+    GLuint buffer = gen_plant_buffer(0, 0, 0, 0.5, w);
+    draw_plant(attrib, buffer);
+    del_buffer(buffer);
+    */
+}
+
 int main(int argc, char **argv) {
     // INITIALIZATION //
     curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -2590,11 +2638,20 @@ int main(int argc, char **argv) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     load_png_texture("textures/sign.png");
 
+    GLuint ui;
+    glGenTextures(1, &ui);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, ui);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    load_png_texture("textures/ui.png");
+
     // LOAD SHADERS //
     Attrib block_attrib = {0};
     Attrib line_attrib = {0};
     Attrib text_attrib = {0};
     Attrib sky_attrib = {0};
+    Attrib ui_attrib = {0};
     GLuint program;
 
     program = load_program(
@@ -2638,6 +2695,14 @@ int main(int argc, char **argv) {
     sky_attrib.sampler = glGetUniformLocation(program, "sampler");
     sky_attrib.timer = glGetUniformLocation(program, "timer");
     sky_attrib.extra1 = glGetUniformLocation(program, "sky_tint");
+
+    program = load_program(
+        "shaders/ui_vertex.glsl", "shaders/ui_fragment.glsl");
+    ui_attrib.program = program;
+    ui_attrib.position = glGetAttribLocation(program, "position");
+    ui_attrib.uv = glGetAttribLocation(program, "uv");
+    ui_attrib.matrix = glGetUniformLocation(program, "matrix");
+    ui_attrib.sampler = glGetUniformLocation(program, "sampler");
 
     // CHECK COMMAND LINE ARGUMENTS //
     if (argc == 2 || argc == 3) {
@@ -2797,6 +2862,7 @@ int main(int argc, char **argv) {
                 render_item(&block_attrib);
                 render_item_count(&text_attrib, ts);
             }
+            test(&ui_attrib);
 
             // RENDER TEXT //
             if (SHOW_INFO_TEXT) {

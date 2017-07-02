@@ -44,7 +44,7 @@ char *load_file(const char *path) {
     char *data = calloc(length + 1, sizeof(char));
     if(fread(data, 1, length, file) != length) {
         fprintf(stderr, "fread failed to read desired length\n");
-        exit(-1);
+        exit(1);
     }
     fclose(file);
     return data;
@@ -89,6 +89,7 @@ GLuint make_shader(GLenum type, const char *source) {
         glGetShaderInfoLog(shader, length, NULL, info);
         fprintf(stderr, "glCompileShader failed:\n%s\n", info);
         free(info);
+        exit(1);
     }
     return shader;
 }
@@ -114,6 +115,7 @@ GLuint make_program(GLuint shader1, GLuint shader2) {
         glGetProgramInfoLog(program, length, NULL, info);
         fprintf(stderr, "glLinkProgram failed: %s\n", info);
         free(info);
+        exit(1);
     }
     glDetachShader(program, shader1);
     glDetachShader(program, shader2);

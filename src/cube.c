@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 #include "cube.h"
 #include "item.h"
 #include "matrix.h"
@@ -250,17 +251,42 @@ void make_character(
     int w = c - 32;
     float du = (w % 16) * a;
     float dv = 1 - (w / 16) * b - b;
-    *(d++) = x - n; *(d++) = y - m;
+    *(d++) = x - n;  *(d++) = y - m;
     *(d++) = du + 0; *(d++) = dv;
-    *(d++) = x + n; *(d++) = y - m;
+    *(d++) = x + n;  *(d++) = y - m;
     *(d++) = du + a; *(d++) = dv;
-    *(d++) = x + n; *(d++) = y + m;
+    *(d++) = x + n;  *(d++) = y + m;
     *(d++) = du + a; *(d++) = dv + b;
-    *(d++) = x - n; *(d++) = y - m;
+    *(d++) = x - n;  *(d++) = y - m;
     *(d++) = du + 0; *(d++) = dv;
-    *(d++) = x + n; *(d++) = y + m;
+    *(d++) = x + n;  *(d++) = y + m;
     *(d++) = du + a; *(d++) = dv + b;
-    *(d++) = x - n; *(d++) = y + m;
+    *(d++) = x - n;  *(d++) = y + m;
+    *(d++) = du + 0; *(d++) = dv + b;
+}
+
+void make_ui_quad(
+    float *data,
+    float x, float y, float n, float m, char spritesheet_index)
+{
+    float *d = data;
+    float s = 0.0625;
+    float a = s;
+    float b = s;
+    int w = spritesheet_index - 32;
+    float du = (w % 16) * a;
+    float dv = 1 - (w / 16) * b - b;
+    *(d++) = x - n;  *(d++) = y - m;
+    *(d++) = du + 0; *(d++) = dv;
+    *(d++) = x + n;  *(d++) = y - m;
+    *(d++) = du + a; *(d++) = dv;
+    *(d++) = x + n;  *(d++) = y + m;
+    *(d++) = du + a; *(d++) = dv + b;
+    *(d++) = x - n;  *(d++) = y - m;
+    *(d++) = du + 0; *(d++) = dv;
+    *(d++) = x + n;  *(d++) = y + m;
+    *(d++) = du + a; *(d++) = dv + b;
+    *(d++) = x - n;  *(d++) = y + m;
     *(d++) = du + 0; *(d++) = dv + b;
 }
 
